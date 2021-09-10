@@ -3,15 +3,14 @@ import PyPDF2
 import csv
 import os
 
-
-directory = '..\extractPDF'
+directory = '.'
 
 for filename in os.listdir(directory):
     x = os.path.join(directory, filename)
     f = open('PO-GoodsMarking.csv', 'a', newline='')
     writer = csv.writer(f)
+
     if ".pdf" in x:
-        print(x)
         pdfFileObj = open(x, 'rb')
         pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
         pageObj = pdfReader.getPage(0)
@@ -20,12 +19,9 @@ for filename in os.listdir(directory):
 
         pdfFileObj.close()
 
-        purchaseOrder = re.findall(r'.{10}Our purchase order', s)
-        purchaseOrder = re.findall(r'\d{10}', str(purchaseOrder))
+        purchaseOrder = re.findall(r'\d{10}Our purchase order', s)
 
-        goodsMarking = re.findall(r'Goods Marking.{50}', s)
-        goodsMarking = re.findall(r'\d{3}.\d{3}.{22}', str(goodsMarking))
-        goodsMarking = re.findall(r'.{10}\s\S\S\s.{3}', str(goodsMarking))
+        goodsMarking = re.findall(r'\d{10}\s\S\S\s.\d.\d', s)
 
         row = purchaseOrder + goodsMarking
 
